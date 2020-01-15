@@ -7,20 +7,20 @@ namespace SimpleHashing.Net
 {
     public class SimpleHash : ISimpleHash
     {
-        private int m_SaltSize = 16;
-        private int m_HashSize = 32;
-        private int m_Iterations = 50000;
+        private const int MSaltSize = 16;
+        private const int MHashSize = 32;
+        private const int MIterations = 50000;
 
         public string Compute(string password)
         {
-            return Compute(password, m_Iterations);
+            return Compute(password, MIterations);
         }
 
         public string Compute(string password, int iterations)
         {
-            using (var bytes = new Rfc2898DeriveBytes(password, m_SaltSize, iterations))
+            using (var bytes = new Rfc2898DeriveBytes(password, MSaltSize, iterations))
             {
-                byte[] hash = bytes.GetBytes(m_HashSize);
+                var hash = bytes.GetBytes(MHashSize);
 
                 return CreateHashString(hash, bytes.Salt, iterations);
             }
@@ -28,11 +28,11 @@ namespace SimpleHashing.Net
 
         private string ComputeHash(string password, string salt, int iterations, int hashSize)
         {
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            var saltBytes = Convert.FromBase64String(salt);
 
             using (var bytes = new Rfc2898DeriveBytes(password, saltBytes, iterations))
             {
-                byte[] hash = bytes.GetBytes(hashSize);
+                var hash = bytes.GetBytes(hashSize);
 
                 return Convert.ToBase64String(hash);
             }
@@ -42,17 +42,17 @@ namespace SimpleHashing.Net
         {
             var parameters = new SimpleHashParameters(passwordHashString);
 
-            int hashSize = Convert.FromBase64String(parameters.PasswordHash).Length;
+            var hashSize = Convert.FromBase64String(parameters.PasswordHash).Length;
 
-            string newPasswordHash = ComputeHash(password, parameters.Salt, parameters.Iterations, hashSize);
+            var newPasswordHash = ComputeHash(password, parameters.Salt, parameters.Iterations, hashSize);
 
             return parameters.PasswordHash == newPasswordHash;
         }
 
         private string CreateHashString(byte[] hash, byte[] salt, int iterations)
         {
-            string saltString = Convert.ToBase64String(salt);
-            string hashStringPart = Convert.ToBase64String(hash);
+            var saltString = Convert.ToBase64String(salt);
+            var hashStringPart = Convert.ToBase64String(hash);
 
             return string.Join
                 (

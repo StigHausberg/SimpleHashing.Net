@@ -1,6 +1,6 @@
 ﻿namespace SimpleHashing.Net
 {
-    internal class Constants
+    internal static class Constants
     {
         public const char Splitter = '$';
 

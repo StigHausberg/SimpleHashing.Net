@@ -2,7 +2,7 @@
 
 namespace SimpleHashing.Net
 {
-    internal class SimpleHashParameters
+    public class SimpleHashParameters
     {
         public string Algorithm { get; private set; }
 
@@ -14,14 +14,14 @@ namespace SimpleHashing.Net
 
         public SimpleHashParameters(string passwordHashString)
         {
-            string[] parameters = ParseParameters(passwordHashString);
+            var parameters = ParseParameters(passwordHashString);
 
             ProcessParameters(parameters);
         }
 
         private static string[] ParseParameters(string passwordHashString)
         {
-            string[] parameters = passwordHashString.Split(Constants.Splitter);
+            var parameters = passwordHashString.Split(Constants.Splitter);
 
             if (parameters.Length != 4)
             {
